@@ -1,0 +1,32 @@
+.App {
+  text-align: center;
+  background-color: #c9d2d5;
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+  cursor: pointer;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+.search-wrapper {
+  position: relative;
+  .fa-search {
+    position: absolute;
+    top: 10px;
+    left: 15px;
+  }
+}
