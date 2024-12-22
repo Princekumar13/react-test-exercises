@@ -1,12 +1,38 @@
+import { useState } from "react";
 import classNames from "classnames";
-import { Input, Table } from "reactstrap";
+import { Button, Input, Table } from "reactstrap";
 import MultipleBarChart from "../components/MultipleBarChart";
 import { TextData } from "../constants/appConstant";
-import { useState } from "react";
+import * as XLSX from 'xlsx';
 
 const Exercisetwo = () => {
 
     const [textData, setTextData] = useState(TextData);
+
+    const excelData = (data) => {
+        return data.map(item => ({
+            'Sr. #': item.id,
+            '# of Participants': item.noOfParticipants,
+            'Questions': item.question,
+            // 'Answer Options': JSON.stringify(item.answerOptions),
+            // 'Percentage': JSON.stringify(item.percentage)
+            'Answer Options': item.answerOptions.join(','),
+            'Percentage': item.percentage.join(',')
+        }));
+    };
+
+    const handleExport = () => {
+        // Convert textData to excelData
+        const convertedData = excelData(textData);
+
+        // Create a worksheet from the converted data
+        const ws = XLSX.utils.json_to_sheet(convertedData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+        
+        // Export to Excel (download the file)
+        XLSX.writeFile(wb, 'output.xlsx');
+    };
 
     const handleSearch = (inputVal) => {
         if(inputVal !== '') {
@@ -20,8 +46,11 @@ const Exercisetwo = () => {
 
     return (
         <div className="container mt-5">
-            <div className="table-header d-flex justify-content-between">
+            <div className="table-header d-flex justify-content-between mb-3">
                 <h3 className="headiing">Text Questions Data</h3>
+            </div>
+
+            <div className="d-flex justify-content-between">
 
                 <div className="search-wrapper">
                     <i className="fa fa-search"></i>
@@ -32,6 +61,15 @@ const Exercisetwo = () => {
                         className="form-control ps-5"
                         onChange={(e) => handleSearch(e.target.value)}
                     />
+                </div>
+
+                <div className="export-btn">
+                        <Button color="link" onClick={(e) => {
+                            e.preventDefault();
+                            handleExport();
+                        }}>
+                            <i className="fa fa-download" aria-hidden="true"></i> Export to Excel
+                        </Button>  
                 </div>
             </div>
 
